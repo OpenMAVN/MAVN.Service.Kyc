@@ -1,0 +1,24 @@
+KycService:
+  Db:
+    LogsConnString:
+      settings-key: KycService-LogsConnString
+      types:
+        - AzureTableStorage
+  Rabbit:
+    Publishers:
+      ConnectionString:
+        settings-key: Pub-ConnectionString
+        types:
+          - RabbitMq
+SlackNotifications:
+    AzureQueue:
+        ConnectionString:
+            settings-key: SlackNotificationsConnString
+            types:
+                - AzureTableStorage
+        QueueName:
+            settings-key: SlackQueueName
+MonitoringServiceClient:
+    MonitoringServiceUrl:
+        settings-key: MonitoringServiceUrl
+

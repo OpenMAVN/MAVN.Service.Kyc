@@ -15,7 +15,7 @@ env:
   CONTRACT_PROJECT: ./contract/MAVN.Service.Kyc.Contract/MAVN.Service.Kyc.Contract.csproj
   JOB_DOCKER_IMAGE: Kyc-job
   JOB_PROJECT: ./src/MAVN.Job.Kyc/MAVN.Job.Kyc.csproj
-  SERVICE_DOCKER_IMAGE: Kyc-service # this template value must be fixed in most cases
+  SERVICE_DOCKER_IMAGE: kyc-service # this template value must be fixed in most cases
   SERVICE_PROJECT: ./src/MAVN.Service.Kyc/MAVN.Service.Kyc.csproj
     
   

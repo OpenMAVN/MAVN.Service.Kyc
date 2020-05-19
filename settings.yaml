@@ -4,10 +4,17 @@ KycService:
       settings-key: KycService-LogsConnString
       types:
         - AzureTableStorage
+    DbConnString:
+      settings-key: KycService-DbConnString
   Rabbit:
     Publishers:
       ConnectionString:
-        settings-key: Pub-ConnectionString
+        settings-key: UserManagementRabbitMQ
+        types:
+          - RabbitMq
+    Subscribers:
+      ConnectionString:
+        settings-key: UserManagementRabbitMQ
         types:
           - RabbitMq
 SlackNotifications:

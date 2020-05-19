@@ -1,16 +1,18 @@
 ﻿using Autofac;
 using JetBrains.Annotations;
-using Lykke.RabbitMqBroker.Publisher;
+using Lykke.RabbitMqBroker.Subscriber;
 using Lykke.SettingsReader;
-using MAVN.Service.Kyc.Contract;
+using MAVN.Service.Kyc.DomainServices.RabbitMq.Subscribers;
 using MAVN.Service.Kyc.Settings;
+using MAVN.Service.PartnerManagement.Contract;
 
 namespace MAVN.Service.Kyc.Modules
 {
     [UsedImplicitly]
     public class RabbitMqModule : Module
     {
-        private const string PubExchangeName = "REPLACE THIS WITH PROPER EXCHANGE NAME"; // TODO pass proper exchange name
+        private const string DefaultQueueName = "kyc";
+        private const string PartnerCreatedExchangeName = "lykke.customer.partnercreated";
 
         private readonly RabbitMqSettings _settings;
 
@@ -21,17 +23,19 @@ namespace MAVN.Service.Kyc.Modules
 
         protected override void Load(ContainerBuilder builder)
         {
-            // NOTE: Do not register entire settings in container, pass necessary settings to services which requires them
-
             RegisterRabbitMqPublishers(builder);
+            RegisterRabbitMqSubscribers(builder);
         }
 
-        // registered publishers could be esolved by IRabbitPublisher<TMessage> interface
         private void RegisterRabbitMqPublishers(ContainerBuilder builder)
         {
-            builder.RegisterJsonRabbitPublisher<MyPublishedMessage>(
-                _settings.Publishers.ConnectionString,
-                PubExchangeName);
+        }
+
+        private void RegisterRabbitMqSubscribers(ContainerBuilder builder)
+        {
+            builder.RegisterJsonRabbitSubscriber<PartnerCreatedSubscriber, PartnerCreatedEvent>(
+                _settings.Subscribers.ConnectionString,
+                PartnerCreatedExchangeName, DefaultQueueName);
         }
     }
 }

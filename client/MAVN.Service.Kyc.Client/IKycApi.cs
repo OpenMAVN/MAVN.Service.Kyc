@@ -1,4 +1,9 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
+using MAVN.Service.Kyc.Client.Models.Requests;
+using MAVN.Service.Kyc.Client.Models.Responses;
 using Refit;
 
 namespace MAVN.Service.Kyc.Client
@@ -12,5 +17,25 @@ namespace MAVN.Service.Kyc.Client
     [PublicAPI]
     public interface IKycApi
     {
+        /// <summary>
+        /// Get current kyc info
+        /// </summary>
+        /// <param name="partnerId"></param>
+        [Get("/api/kyc/current")]
+        Task<KycInformationResponse> GetCurrentByPartnerIdAsync([Query] Guid partnerId);
+
+        /// <summary>
+        /// Get history of kyc info
+        /// </summary>
+        /// <param name="partnerId"></param>
+        [Get("/api/kyc/history")]
+        Task<IReadOnlyList<KycStatusChangeResponse>> GetKycStatusChangeHistoryByPartnerIdAsync([Query] Guid partnerId);
+
+        /// <summary>
+        /// update  kyc info
+        /// </summary>
+        /// <param name="request"></param>
+        [Put("/api/kyc")]
+        Task<KycUpdateResponse> UpdateKycInfoAsync([Body] KycUpdateRequest request);
     }
 }

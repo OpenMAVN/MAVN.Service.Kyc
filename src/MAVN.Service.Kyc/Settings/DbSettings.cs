@@ -6,5 +6,8 @@ namespace MAVN.Service.Kyc.Settings
     {
         [AzureTableCheck]
         public string LogsConnString { get; set; }
+
+        [SqlCheck]
+        public string DbConnString { get; set; }
     }
 }

@@ -17,6 +17,9 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Dockerfile">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
@@ -29,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\client\MAVN.Service.Kyc.Client\MAVN.Service.Kyc.Client.csproj" />
     <ProjectReference Include="..\MAVN.Service.Kyc.DomainServices\MAVN.Service.Kyc.DomainServices.csproj" />
+    <ProjectReference Include="..\MAVN.Service.Kyc.MsSqlRepositories\MAVN.Service.Kyc.MsSqlRepositories.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />

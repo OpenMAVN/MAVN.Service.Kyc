@@ -12,7 +12,7 @@ namespace MAVN.Service.Kyc.Client
         // NO actual methods should be placed here (these go to controller interfaces, for example - IKycApi).
         // ONLY properties for accessing controller interfaces are allowed.
 
-        /// <summary>Application Api interface</summary>
-        IKycApi Api { get; }
+        /// <summary>Application KycApi interface</summary>
+        IKycApi KycApi { get; }
     }
 }

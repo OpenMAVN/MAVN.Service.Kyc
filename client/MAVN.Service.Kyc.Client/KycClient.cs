@@ -7,15 +7,15 @@ namespace MAVN.Service.Kyc.Client
     /// </summary>
     public class KycClient : IKycClient
     {
-        // Note: Add similar Api properties for each new service controller
+        // Note: Add similar KycApi properties for each new service controller
 
-        /// <summary>Inerface to Kyc Api.</summary>
-        public IKycApi Api { get; private set; }
+        /// <summary>Interface to Kyc KycApi.</summary>
+        public IKycApi KycApi { get; private set; }
 
         /// <summary>C-tor</summary>
         public KycClient(IHttpClientGenerator httpClientGenerator)
         {
-            Api = httpClientGenerator.Generate<IKycApi>();
+            KycApi = httpClientGenerator.Generate<IKycApi>();
         }
     }
 }

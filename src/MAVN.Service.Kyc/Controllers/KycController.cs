@@ -44,7 +44,7 @@ namespace MAVN.Service.Kyc.Controllers
         /// </summary>
         /// <param name="partnerId"></param>
         [HttpGet("history")]
-        [ProducesResponseType(typeof(KycInformationResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(KycStatusChangeResponse), (int)HttpStatusCode.OK)]
         public async Task<IReadOnlyList<KycStatusChangeResponse>> GetKycStatusChangeHistoryByPartnerIdAsync([FromQuery]Guid partnerId)
         {
             var result = await _kycService.GetKycStatusChangesAsync(partnerId);

@@ -12,5 +12,6 @@ namespace MAVN.Service.Kyc.Domain.Services
         Task<UpdateKycStatusErrorCode> UpdateKycInfoAsync(KycInformation model);
         Task<IReadOnlyList<IKycInformationStatusChange>> GetKycStatusChangesAsync(Guid partnerId);
         Task<IKycInformation> GetCurrentKycStatusAsync(Guid partnerId);
+        Task<IReadOnlyList<IKycInformation>> GetCurrentKycStatusByPartnerIdsAsync(Guid[] partnerIds);
     }
 }

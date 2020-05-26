@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MAVN.Common.MsSql;
 using MAVN.Service.Kyc.Domain.Models;
 using MAVN.Service.Kyc.Domain.Repositories;
 using MAVN.Service.Kyc.MsSqlRepositories.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace MAVN.Service.Kyc.MsSqlRepositories.Repositories
 {
@@ -54,13 +57,25 @@ namespace MAVN.Service.Kyc.MsSqlRepositories.Repositories
             }
         }
 
-        public async Task<IKycInformation> GeyByPartnerId(Guid partnerId)
+        public async Task<IKycInformation> GetByPartnerId(Guid partnerId)
         {
             using (var context = _contextFactory.CreateDataContext())
             {
                 var entity = await context.KycInformation.FindAsync(partnerId);
 
                 return entity;
+            }
+        }
+
+        public async Task<IReadOnlyList<IKycInformation>> GetByPartnerIds(Guid[] partnerIds)
+        {
+            using (var context = _contextFactory.CreateDataContext())
+            {
+                var result = await context.KycInformation
+                    .Where(k => partnerIds.Contains(k.PartnerId))
+                    .ToListAsync();
+
+                return result;
             }
         }
     }

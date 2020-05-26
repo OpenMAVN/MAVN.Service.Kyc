@@ -37,5 +37,12 @@ namespace MAVN.Service.Kyc.Client
         /// <param name="request"></param>
         [Put("/api/kyc")]
         Task<KycUpdateResponse> UpdateKycInfoAsync([Body] KycUpdateRequest request);
+
+        /// <summary>
+        /// Get current kyc info for list of partners
+        /// </summary>
+        /// <param name="partnerIds"></param>
+        [Post("/api/kyc/list")]
+        Task<IReadOnlyList<KycInformationResponse>> GetCurrentByPartnerIdsAsync([Body] Guid[] partnerIds);
     }
 }

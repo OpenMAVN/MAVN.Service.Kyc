@@ -42,7 +42,7 @@ namespace MAVN.Service.Kyc.DomainServices
             if (model.KycStatus == KycStatus.Rejected && string.IsNullOrEmpty(model.Comment))
                 return UpdateKycStatusErrorCode.CommentRequired;
 
-            var current = await _kycInformationRepository.GeyByPartnerId(model.PartnerId);
+            var current = await _kycInformationRepository.GetByPartnerId(model.PartnerId);
 
             if (current == null)
                 return UpdateKycStatusErrorCode.KycDoesNotExist;
@@ -78,6 +78,9 @@ namespace MAVN.Service.Kyc.DomainServices
             => _kycStatusChangeRepository.GetByPartnerIdAsync(partnerId);
 
         public Task<IKycInformation> GetCurrentKycStatusAsync(Guid partnerId)
-           => _kycInformationRepository.GeyByPartnerId(partnerId);
+           => _kycInformationRepository.GetByPartnerId(partnerId);
+
+        public Task<IReadOnlyList<IKycInformation>> GetCurrentKycStatusByPartnerIdsAsync(Guid[] partnerIds)
+            => _kycInformationRepository.GetByPartnerIds(partnerIds);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -37,6 +38,20 @@ namespace MAVN.Service.Kyc.Controllers
             var result = await _kycService.GetCurrentKycStatusAsync(partnerId);
 
             return _mapper.Map<KycInformationResponse>(result);
+        }
+
+        /// <summary>
+        /// Get current kyc info for list of partners
+        /// </summary>
+        /// <param name="partnerIds"></param>
+        [HttpPost("list")]
+        [ProducesResponseType(typeof(KycInformationResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IReadOnlyList<KycInformationResponse>> GetCurrentByPartnerIdsAsync([FromBody][Required] Guid[] partnerIds)
+        {
+            var result = await _kycService.GetCurrentKycStatusByPartnerIdsAsync(partnerIds);
+
+            return _mapper.Map<IReadOnlyList<KycInformationResponse>>(result);
         }
 
         /// <summary>

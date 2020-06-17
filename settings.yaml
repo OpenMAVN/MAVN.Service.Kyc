@@ -17,6 +17,20 @@ KycService:
         settings-key: UserManagementRabbitMQ
         types:
           - RabbitMq
+  BackOfficeLink:
+    settings-key: AdminManagementService-BackOfficeLink
+  KycApprovedEmail:
+    EmailTemplateId:
+      settings-key: KycService-KycApprovedEmail-EmailTemplateId
+    SubjectTemplateId:
+      settings-key: KycService-KycApprovedEmail-SubjectTemplateId
+    VoucherManagerUrl:
+      settings-key: KycService-KycApprovedEmail-VoucherManagerUrl
+  KycRejectedEmail:
+    EmailTemplateId:
+      settings-key: KycService-KycRejectedEmail-EmailTemplateId
+    SubjectTemplateId:
+      settings-key: KycService-KycRejectedEmail-SubjectTemplateId
 SlackNotifications:
     AzureQueue:
         ConnectionString:
@@ -28,4 +42,9 @@ SlackNotifications:
 MonitoringServiceClient:
     MonitoringServiceUrl:
         settings-key: MonitoringServiceUrl
-
+PartnerManagementService:
+  ServiceUrl:
+    settings-key: PartnerManagementServiceUrl
+AdminManagementService:
+  ServiceUrl:
+    settings-key: AdminManagementServiceUrl

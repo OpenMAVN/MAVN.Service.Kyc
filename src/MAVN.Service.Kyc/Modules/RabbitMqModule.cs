@@ -1,9 +1,11 @@
 ﻿using Autofac;
 using JetBrains.Annotations;
+using Lykke.RabbitMqBroker.Publisher;
 using Lykke.RabbitMqBroker.Subscriber;
 using Lykke.SettingsReader;
 using MAVN.Service.Kyc.DomainServices.RabbitMq.Subscribers;
 using MAVN.Service.Kyc.Settings;
+using MAVN.Service.NotificationSystem.SubscriberContract;
 using MAVN.Service.PartnerManagement.Contract;
 
 namespace MAVN.Service.Kyc.Modules
@@ -13,6 +15,7 @@ namespace MAVN.Service.Kyc.Modules
     {
         private const string DefaultQueueName = "kyc";
         private const string PartnerCreatedExchangeName = "lykke.customer.partnercreated";
+        private const string NotificationSystemEmailExchangeName = "lykke.notificationsystem.command.emailmessage";
 
         private readonly RabbitMqSettings _settings;
 
@@ -29,6 +32,8 @@ namespace MAVN.Service.Kyc.Modules
 
         private void RegisterRabbitMqPublishers(ContainerBuilder builder)
         {
+            builder.RegisterJsonRabbitPublisher<EmailMessageEvent>(_settings.Publishers.ConnectionString,
+                NotificationSystemEmailExchangeName);
         }
 
         private void RegisterRabbitMqSubscribers(ContainerBuilder builder)

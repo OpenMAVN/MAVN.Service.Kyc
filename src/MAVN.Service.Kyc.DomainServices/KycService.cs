@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Log;
 using Lykke.Common.Log;
+using MAVN.Service.AdminManagement.Client;
+using MAVN.Service.AdminManagement.Client.Models.Enums;
+using MAVN.Service.AdminManagement.Client.Models.Requests;
 using MAVN.Service.Kyc.Domain.Enums;
 using MAVN.Service.Kyc.Domain.Models;
 using MAVN.Service.Kyc.Domain.Repositories;
 using MAVN.Service.Kyc.Domain.Services;
+using MAVN.Service.PartnerManagement.Client;
 
 namespace MAVN.Service.Kyc.DomainServices
 {
@@ -14,12 +18,24 @@ namespace MAVN.Service.Kyc.DomainServices
     {
         private readonly IKycInformationRepository _kycInformationRepository;
         private readonly IKycStatusChangeRepository _kycStatusChangeRepository;
+        private readonly INotificationsService _notificationsService;
+        private IPartnerManagementClient _partnerManagementClient;
+        private readonly IAdminManagementServiceClient _adminManagementClient;
         private readonly ILog _log;
 
-        public KycService(IKycInformationRepository kycInformationRepository, IKycStatusChangeRepository kycStatusChangeRepository, ILogFactory logFactory)
+        public KycService(
+            IKycInformationRepository kycInformationRepository,
+            IKycStatusChangeRepository kycStatusChangeRepository,
+            INotificationsService notificationsService,
+            IPartnerManagementClient partnerManagementClient,
+            IAdminManagementServiceClient adminManagementClient,
+            ILogFactory logFactory)
         {
             _kycInformationRepository = kycInformationRepository;
             _kycStatusChangeRepository = kycStatusChangeRepository;
+            _notificationsService = notificationsService;
+            _partnerManagementClient = partnerManagementClient;
+            _adminManagementClient = adminManagementClient;
             _log = logFactory.CreateLog(this);
         }
 
@@ -70,6 +86,34 @@ namespace MAVN.Service.Kyc.DomainServices
             }
 
             await _kycInformationRepository.UpdateAsync(model);
+
+            if (model.KycStatus != KycStatus.Accepted && model.KycStatus != KycStatus.Rejected)
+                return UpdateKycStatusErrorCode.None;
+
+            var admin = await _adminManagementClient.AdminsApi.GetByIdAsync(
+                new GetAdminByIdRequestModel { AdminUserId = model.AdminUserId.ToString() });
+
+            if (admin.Error != AdminUserResponseErrorCodes.None || admin.Profile == null)
+            {
+                _log.Warning("Missing admin when trying to send KYC notification", context: model.AdminUserId);
+                return UpdateKycStatusErrorCode.None;
+            }
+
+            var partner = await _partnerManagementClient.Partners.GetByIdAsync(model.PartnerId);
+
+            if (partner == null)
+            {
+                _log.Warning("Missing partner when trying to send KYC notification", context: model.PartnerId);
+                return UpdateKycStatusErrorCode.None;
+            }
+
+            if (model.KycStatus == KycStatus.Accepted)
+                await _notificationsService.NotifyKycApprovedAsync(model.AdminUserId.ToString(),
+                    admin.Profile.Email,
+                    admin.Profile.FirstName, partner.Name);
+            else
+                await _notificationsService.NotifyKycRejectedAsync(model.AdminUserId.ToString(),
+                    admin.Profile.Email, admin.Profile.FirstName, partner.Name, model.Comment);
 
             return UpdateKycStatusErrorCode.None;
         }

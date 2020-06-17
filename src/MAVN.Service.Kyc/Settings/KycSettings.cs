@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Lykke.SettingsReader.Attributes;
+using MAVN.Service.Kyc.Settings.EmailSettings;
 
 namespace MAVN.Service.Kyc.Settings
 {
@@ -9,5 +10,11 @@ namespace MAVN.Service.Kyc.Settings
         public DbSettings Db { get; set; }
 
         public RabbitMqSettings Rabbit { get; set; }
+
+        public KycApprovedEmail KycApprovedEmail { get; set; }
+
+        public KycRejectedEmail KycRejectedEmail { get; set; }
+
+        public string BackOfficeLink { get; set; }
     }
 }

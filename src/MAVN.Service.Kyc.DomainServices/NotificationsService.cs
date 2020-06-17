@@ -41,7 +41,7 @@ namespace MAVN.Service.Kyc.DomainServices
             {
                 {"BusinessName", partnerName},
                 {"VoucherManagerUrl", _backOfficeUrl + _voucherManagerUrl},
-                {"AdminUserName", $" {adminUserName}"},
+                {"AdminUserName", !string.IsNullOrEmpty(adminUserName) ? $" {adminUserName}" : adminUserName},
             };
 
             await SendEmailAsync(adminUserId, adminUserEmail, values, _kycApprovedEmailTemplateId,
@@ -54,7 +54,7 @@ namespace MAVN.Service.Kyc.DomainServices
             {
                 {"BusinessName", partnerName},
                 {"RejectionComment", rejectionComment},
-                {"AdminUserName", $" {adminUserName}"},
+                {"AdminUserName", !string.IsNullOrEmpty(adminUserName) ? $" {adminUserName}" : adminUserName},
             };
 
             await SendEmailAsync(adminUserId, adminUserEmail, values, _kycRejectedEmailTemplateId,

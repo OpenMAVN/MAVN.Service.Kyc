@@ -6,6 +6,9 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Lykke.RabbitMqBroker" Version="7.13.1" />
+    <PackageReference Include="MAVN.Service.AdminManagement.Client" Version="1.4.0" />
+    <PackageReference Include="MAVN.Service.NotificationSystem.SubscriberContract" Version="1.1.0" />
+    <PackageReference Include="MAVN.Service.PartnerManagement.Client" Version="2.12.0" />
     <PackageReference Include="MAVN.Service.PartnerManagement.Contract" Version="2.3.0" />
   </ItemGroup>
   <ItemGroup>

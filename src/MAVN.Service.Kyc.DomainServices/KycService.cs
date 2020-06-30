@@ -90,15 +90,6 @@ namespace MAVN.Service.Kyc.DomainServices
             if (model.KycStatus != KycStatus.Accepted && model.KycStatus != KycStatus.Rejected)
                 return UpdateKycStatusErrorCode.None;
 
-            var admin = await _adminManagementClient.AdminsApi.GetByIdAsync(
-                new GetAdminByIdRequestModel { AdminUserId = model.AdminUserId.ToString() });
-
-            if (admin.Error != AdminUserResponseErrorCodes.None || admin.Profile == null)
-            {
-                _log.Warning("Missing admin when trying to send KYC notification", context: model.AdminUserId);
-                return UpdateKycStatusErrorCode.None;
-            }
-
             var partner = await _partnerManagementClient.Partners.GetByIdAsync(model.PartnerId);
 
             if (partner == null)
@@ -107,12 +98,21 @@ namespace MAVN.Service.Kyc.DomainServices
                 return UpdateKycStatusErrorCode.None;
             }
 
+            var admin = await _adminManagementClient.AdminsApi.GetByIdAsync(
+                new GetAdminByIdRequestModel { AdminUserId = partner.CreatedBy.ToString() });
+
+            if (admin.Error != AdminUserResponseErrorCodes.None || admin.Profile == null)
+            {
+                _log.Warning("Missing admin when trying to send KYC notification", context: new { PartnerAdminId = partner.CreatedBy });
+                return UpdateKycStatusErrorCode.None;
+            }
+
             if (model.KycStatus == KycStatus.Accepted)
-                await _notificationsService.NotifyKycApprovedAsync(model.AdminUserId.ToString(),
+                await _notificationsService.NotifyKycApprovedAsync(admin.Profile.AdminUserId,
                     admin.Profile.Email,
                     admin.Profile.FirstName, partner.Name);
             else
-                await _notificationsService.NotifyKycRejectedAsync(model.AdminUserId.ToString(),
+                await _notificationsService.NotifyKycRejectedAsync(admin.Profile.AdminUserId,
                     admin.Profile.Email, admin.Profile.FirstName, partner.Name, model.Comment);
 
             return UpdateKycStatusErrorCode.None;

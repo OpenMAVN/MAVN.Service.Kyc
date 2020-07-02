@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Data.Common;
 using JetBrains.Annotations;
-using MAVN.Common.MsSql;
+using MAVN.Persistence.PostgreSQL.Legacy;
 using MAVN.Service.Kyc.MsSqlRepositories.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace MAVN.Service.Kyc.MsSqlRepositories
 {
-    public class KycContext : MsSqlContext
+    public class KycContext : PostgreSQLContext
     {
         private const string Schema = "kyc";
 
@@ -37,7 +37,7 @@ namespace MAVN.Service.Kyc.MsSqlRepositories
         {
         }
 
-        protected override void OnLykkeModelCreating(ModelBuilder modelBuilder)
+        protected override void OnMAVNModelCreating(ModelBuilder modelBuilder)
         {
         }
     }

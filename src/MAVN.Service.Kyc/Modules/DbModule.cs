@@ -5,7 +5,7 @@ using AzureStorage.Tables;
 using JetBrains.Annotations;
 using Lykke.Common.Log;
 using Lykke.SettingsReader;
-using MAVN.Common.MsSql;
+using MAVN.Persistence.PostgreSQL.Legacy;
 using MAVN.Service.Kyc.Domain.Repositories;
 using MAVN.Service.Kyc.MsSqlRepositories;
 using MAVN.Service.Kyc.MsSqlRepositories.Repositories;
@@ -26,7 +26,7 @@ namespace MAVN.Service.Kyc.Modules
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterMsSql(
+            builder.RegisterPostgreSQL(
                 _connectionString,
                 connString => new KycContext(connString, false),
                 dbConn => new KycContext(dbConn));
